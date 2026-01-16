@@ -1,6 +1,7 @@
 'use client';
 
-import { Download, Upload } from 'lucide-react';
+import { Download, Upload, BarChart2, Home } from 'lucide-react';
+import Link from 'next/link';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { useBudgetStore } from '@/store/budgetStore';
 import { exportToCSV, importFromCSV } from '@/lib/calculations';
@@ -37,13 +38,33 @@ export function Header() {
         <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                            ClarityFlow
-                        </h1>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Personal Budget Tracker
-                        </p>
+                    <div className="flex items-center gap-6">
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                ClarityFlow
+                            </h1>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                                Personal Budget Tracker
+                            </p>
+                        </div>
+
+                        {/* Navigation Links */}
+                        <nav className="hidden md:flex items-center gap-4">
+                            <Link
+                                href="/"
+                                className="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                            >
+                                <Home className="w-4 h-4" />
+                                <span className="text-sm font-medium">Dashboard</span>
+                            </Link>
+                            <Link
+                                href="/analytics"
+                                className="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                            >
+                                <BarChart2 className="w-4 h-4" />
+                                <span className="text-sm font-medium">Analytics</span>
+                            </Link>
+                        </nav>
                     </div>
 
                     <div className="flex items-center gap-3">
