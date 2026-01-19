@@ -6,6 +6,7 @@ import {
     RecurringTransaction,
     SavingsGoal,
     Tag,
+    CustomCategory,
     CurrencyInfo,
     SearchPreset,
     UserPreferences,
@@ -27,6 +28,8 @@ import {
     saveSavingsGoals,
     loadTags,
     saveTags,
+    loadCustomCategories,
+    saveCustomCategories,
     loadCurrencies,
     saveCurrencies,
     loadSearchPresets,
@@ -55,6 +58,7 @@ interface BudgetStore {
     recurringTransactions: RecurringTransaction[];
     savingsGoals: SavingsGoal[];
     tags: Tag[];
+    customCategories: CustomCategory[];
     currencies: CurrencyInfo[];
     baseCurrency: string;
     searchPresets: SearchPreset[];
@@ -94,6 +98,13 @@ interface BudgetStore {
     deleteTag: (id: string) => void;
     addTagToTransaction: (transactionId: string, tagName: string) => void;
     removeTagFromTransaction: (transactionId: string, tagName: string) => void;
+
+    // Custom category methods
+    addCustomCategory: (category: Omit<CustomCategory, 'id'>) => void;
+    updateCustomCategory: (id: string, updates: Partial<CustomCategory>) => void;
+    deleteCustomCategory: (id: string) => void;
+    reorderCategories: (categories: CustomCategory[]) => void;
+
 
     // Currency methods
     updateBaseCurrency: (currency: string) => void;
@@ -177,6 +188,7 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
     recurringTransactions: [],
     savingsGoals: [],
     tags: [],
+    customCategories: [],
     currencies: DEFAULT_CURRENCIES,
     baseCurrency: 'USD',
     searchPresets: [],
@@ -459,6 +471,50 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
     },
 
     // ============================================================================
+    // CUSTOM CATEGORY METHODS
+    // ============================================================================
+
+    addCustomCategory: (category) => {
+        const newCategory: CustomCategory = {
+            ...category,
+            id: generateId(),
+            createdDate: new Date().toISOString().split('T')[0],
+        };
+
+        set((state) => {
+            const newCategories = [...state.customCategories, newCategory];
+            saveCustomCategories(newCategories);
+            return { customCategories: newCategories };
+        });
+    },
+
+    updateCustomCategory: (id, updates) => {
+        set((state) => {
+            const newCategories = state.customCategories.map(c =>
+                c.id === id ? { ...c, ...updates } : c
+            );
+            saveCustomCategories(newCategories);
+            return { customCategories: newCategories };
+        });
+    },
+
+    deleteCustomCategory: (id) => {
+        set((state) => {
+            const newCategories = state.customCategories.filter(c => c.id !== id);
+            saveCustomCategories(newCategories);
+            return { customCategories: newCategories };
+        });
+    },
+
+    reorderCategories: (categories) => {
+        set(() => {
+            saveCustomCategories(categories);
+            return { customCategories: categories };
+        });
+    },
+
+
+    // ============================================================================
     // CURRENCY METHODS
     // ============================================================================
 
@@ -704,6 +760,7 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
             recurringTransactions: [],
             savingsGoals: [],
             tags: [],
+            customCategories: [],
             currencies: DEFAULT_CURRENCIES,
             baseCurrency: 'USD',
             searchPresets: [],
@@ -743,6 +800,7 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
         const recurringTransactions = loadRecurringTransactions();
         const savingsGoals = loadSavingsGoals();
         const tags = loadTags();
+        const customCategories = loadCustomCategories();
         const currencies = loadCurrencies();
         const searchPresets = loadSearchPresets();
         const userPreferences = loadUserPreferences() || getDefaultUserPreferences();
@@ -756,6 +814,7 @@ export const useBudgetStore = create<BudgetStore>((set, get) => ({
             recurringTransactions,
             savingsGoals,
             tags,
+            customCategories,
             currencies,
             baseCurrency: userPreferences.baseCurrency,
             searchPresets,

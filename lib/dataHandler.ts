@@ -4,6 +4,7 @@ import {
     RecurringTransaction,
     SavingsGoal,
     Tag,
+    CustomCategory,
     CurrencyInfo,
     SearchPreset,
     UserPreferences,
@@ -19,6 +20,7 @@ const BUDGET_GOALS_KEY = 'clarityflow_budget_goals';
 const RECURRING_TRANSACTIONS_KEY = 'clarityflow_recurring_transactions';
 const SAVINGS_GOALS_KEY = 'clarityflow_savings_goals';
 const TAGS_KEY = 'clarityflow_tags';
+const CUSTOM_CATEGORIES_KEY = 'clarityflow_custom_categories';
 const CURRENCIES_KEY = 'clarityflow_currencies';
 const SEARCH_PRESETS_KEY = 'clarityflow_search_presets';
 const USER_PREFERENCES_KEY = 'clarityflow_preferences';
@@ -177,6 +179,36 @@ const debouncedWriteTags = debounce(writeTagsToStorage, 500);
 export const saveTags = (tags: Tag[]): void => {
     debouncedWriteTags(tags);
 };
+
+// Custom Categories
+export const loadCustomCategories = (): CustomCategory[] => {
+    if (typeof window === 'undefined') return [];
+    try {
+        const data = localStorage.getItem(CUSTOM_CATEGORIES_KEY);
+        return data ? JSON.parse(data) : [];
+    } catch (error) {
+        console.error('Error loading custom categories:', error);
+        return [];
+    }
+};
+
+// Internal synchronous write function
+const writeCustomCategoriesToStorage = (categories: CustomCategory[]): void => {
+    if (typeof window === 'undefined') return;
+    try {
+        localStorage.setItem(CUSTOM_CATEGORIES_KEY, JSON.stringify(categories));
+    } catch (error) {
+        console.error('Error saving custom categories:', error);
+    }
+};
+
+// Debounced version
+const debouncedWriteCustomCategories = debounce(writeCustomCategoriesToStorage, 500);
+
+export const saveCustomCategories = (categories: CustomCategory[]): void => {
+    debouncedWriteCustomCategories(categories);
+};
+
 
 // Currencies
 export const loadCurrencies = (): CurrencyInfo[] => {
@@ -445,6 +477,7 @@ export const clearAllData = (): void => {
         localStorage.removeItem(RECURRING_TRANSACTIONS_KEY);
         localStorage.removeItem(SAVINGS_GOALS_KEY);
         localStorage.removeItem(TAGS_KEY);
+        localStorage.removeItem(CUSTOM_CATEGORIES_KEY);
         localStorage.removeItem(CURRENCIES_KEY);
         localStorage.removeItem(SEARCH_PRESETS_KEY);
         localStorage.removeItem(USER_PREFERENCES_KEY);
