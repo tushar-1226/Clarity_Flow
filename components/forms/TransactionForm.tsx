@@ -7,7 +7,8 @@ import { TransactionType, INCOME_CATEGORIES, EXPENSE_CATEGORIES } from '@/types'
 import { format } from 'date-fns';
 
 export function TransactionForm() {
-    const { addTransaction } = useBudgetStore();
+    // Selective subscription
+    const addTransaction = useBudgetStore(state => state.addTransaction);
 
     const [formData, setFormData] = useState({
         date: format(new Date(), 'yyyy-MM-dd'),

@@ -1,20 +1,20 @@
 # ClarityFlow - Setup & Deployment Guide
 
-## 🚀 New Features Implemented
+##  New Features Implemented
 
-### 1. ✅ Recurring Transactions
+### 1.  Recurring Transactions
 - **Auto-generate** monthly bills, subscriptions, and income
 - **Flexible scheduling**: Daily, weekly, monthly, yearly
 - **Pause/Resume** functionality
 - **End date** support for finite recurring transactions
 
-### 2. 📊 Advanced Analytics Dashboard
+### 2.  Advanced Analytics Dashboard
 - **Monthly Trend Chart**: Visualize income, expenses, and net savings over time
 - **Financial Health Score**: 0-100 score based on savings rate, budget adherence, income stability
 - **Category Trends**: Track top 5 expense categories month-over-month
 - **Actionable Insights**: See what's working and what needs improvement
 
-### 3. ☁️ Cloud Sync with Authentication (Optional)
+### 3.  Cloud Sync with Authentication (Optional)
 - **Multi-device sync** using Vercel Postgres
 - **Secure authentication** with NextAuth.js
 - **Automatic data migration** from localStorage
@@ -22,7 +22,7 @@
 
 ---
 
-## 📦 Dependencies Installed
+##  Dependencies Installed
 
 ```bash
 npm install next-auth@latest @vercel/postgres bcryptjs @types/bcryptjs
@@ -30,7 +30,7 @@ npm install next-auth@latest @vercel/postgres bcryptjs @types/bcryptjs
 
 ---
 
-## 🔧 Local Development (No Cloud)
+##  Local Development (No Cloud)
 
 **No additional setup needed!** The app works perfectly with localStorage alone:
 
@@ -46,7 +46,7 @@ All data is saved locally in your browser.
 
 ---
 
-## ☁️ Cloud Sync Setup (Optional)
+##  Cloud Sync Setup (Optional)
 
 If you want multi-device sync, follow these steps:
 
@@ -110,7 +110,7 @@ vercel --prod
 
 ---
 
-## 🗂️ Database Schema
+##  Database Schema
 
 Tables created:
 - **users**: User accounts with hashed passwords
@@ -123,7 +123,7 @@ See `lib/db/schema.sql` for full schema.
 
 ---
 
-## 🎯 Features Overview
+##  Features Overview
 
 ### Recurring Transactions
 1. Click "Create Recurring Transaction" on dashboard
@@ -145,7 +145,7 @@ See `lib/db/schema.sql` for full schema.
 
 ---
 
-##  ⚙️ Configuration
+##   Configuration
 
 ### Without Cloud (Default)
 - Data stored in localStorage
@@ -161,7 +161,7 @@ See `lib/db/schema.sql` for full schema.
 
 ---
 
-## 🚨 Important Notes
+##  Important Notes
 
 1. **Data Migration**: When you first enable cloud sync and sign in, your localStorage data will automatically migrate to the cloud
 
@@ -176,7 +176,7 @@ See `lib/db/schema.sql` for full schema.
 
 ---
 
-## 📱 Usage
+##  Usage
 
 ### Add Recurring Transaction
 ```
@@ -199,11 +199,11 @@ Start Date: 2024-01-01
 2. Navigate to `/signup`
 3. Create account
 4. Sign in
-5. ✅ Data syncs automatically!
+5.  Data syncs automatically!
 
 ---
 
-## 🔐 Security
+##  Security
 
 - Passwords hashed with bcrypt
 - NextAuth.js session management
@@ -212,7 +212,7 @@ Start Date: 2024-01-01
 
 ---
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### "Database connection failed"
 - Check `DATABASE_URL` is set correctly in `.env.local`
@@ -231,7 +231,7 @@ Start Date: 2024-01-01
 
 ---
 
-## 📄 Project Structure
+##  Project Structure
 
 ```
 ClarityFlow/
@@ -257,11 +257,11 @@ ClarityFlow/
 
 ---
 
-## 🎉 You're All Set!
+##  You're All Set!
 
 Your ClarityFlow app now has:
-- ✅ Recurring transactions that auto-generate
-- ✅ Advanced analytics with financial health scoring
-- ✅ Optional cloud sync for multi-device access
+-  Recurring transactions that auto-generate
+-  Advanced analytics with financial health scoring
+-  Optional cloud sync for multi-device access
 
-**Start tracking your finances with clarity!** 💰📊
+**Start tracking your finances with clarity!** 

@@ -7,7 +7,10 @@ import { format } from 'date-fns';
 import { RecurringTransaction } from '@/types';
 
 export function RecurringTransactionList() {
-    const { recurringTransactions, toggleRecurringTransaction, deleteRecurringTransaction } = useBudgetStore();
+    // Selective subscriptions
+    const recurringTransactions = useBudgetStore(state => state.recurringTransactions);
+    const toggleRecurringTransaction = useBudgetStore(state => state.toggleRecurringTransaction);
+    const deleteRecurringTransaction = useBudgetStore(state => state.deleteRecurringTransaction);
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
@@ -62,8 +65,8 @@ export function RecurringTransactionList() {
                     <div
                         key={recurring.id}
                         className={`p-4 rounded-lg border ${recurring.isActive
-                                ? 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600'
-                                : 'bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 opacity-60'
+                            ? 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600'
+                            : 'bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 opacity-60'
                             }`}
                     >
                         <div className="flex items-start justify-between">
@@ -74,8 +77,8 @@ export function RecurringTransactionList() {
                                     </h3>
                                     <span
                                         className={`px-2 py-0.5 rounded-full text-xs font-medium ${recurring.type === 'income'
-                                                ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
-                                                : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
+                                            ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
+                                            : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
                                             }`}
                                     >
                                         {recurring.type}
@@ -122,8 +125,8 @@ export function RecurringTransactionList() {
                                 <button
                                     onClick={() => handleToggle(recurring.id)}
                                     className={`p-2 rounded-lg transition-colors ${recurring.isActive
-                                            ? 'text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20'
-                                            : 'text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20'
+                                        ? 'text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20'
+                                        : 'text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20'
                                         }`}
                                     title={recurring.isActive ? 'Pause' : 'Resume'}
                                 >

@@ -1,13 +1,21 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { useBudgetStore } from '@/store/budgetStore';
 import { calculateFinancialHealthScore } from '@/lib/analytics';
 import { TrendingUp, TrendingDown, Minus, Target, PiggyBank, Activity, LayoutGrid } from 'lucide-react';
 
 export default function FinancialHealthScore() {
-    const { transactions, budgetGoals } = useBudgetStore();
+    // Selective subscriptions
+    const transactions = useBudgetStore(state => state.transactions);
+    const budgetGoals = useBudgetStore(state => state.budgetGoals);
 
-    const healthData = calculateFinancialHealthScore(transactions, budgetGoals);
+    // Memoize expensive calculation - only recomputes when dependencies change
+    const healthData = useMemo(
+        () => calculateFinancialHealthScore(transactions, budgetGoals),
+        [transactions, budgetGoals]
+    );
 
     // Determine score color and label
     const getScoreColor = (score: number) => {

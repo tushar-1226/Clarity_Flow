@@ -69,6 +69,20 @@ export interface Tag {
     createdDate: string;
 }
 
+// Custom Categories
+export interface CustomCategory {
+    id: string;
+    name: string;
+    type: 'income' | 'expense';
+    icon?: string; // Lucide icon name or emoji
+    color?: string; // Hex color code
+    parentCategoryId?: string; // For hierarchical categories
+    isDefault: boolean; // True for built-in categories
+    createdDate?: string; // Auto-generated
+    order?: number; // Display order
+}
+
+
 // Currency information
 export interface CurrencyInfo {
     code: Currency;

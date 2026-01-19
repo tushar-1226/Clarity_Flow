@@ -4,6 +4,7 @@ import {
     RecurringTransaction,
     SavingsGoal,
     Tag,
+    CustomCategory,
     CurrencyInfo,
     SearchPreset,
     UserPreferences,
@@ -12,12 +13,14 @@ import {
     MultiPeriodBudgetGoals,
     DEFAULT_CURRENCIES
 } from '@/types';
+import { debounce } from './utils/debounce';
 
 const TRANSACTIONS_KEY = 'clarityflow_transactions';
 const BUDGET_GOALS_KEY = 'clarityflow_budget_goals';
 const RECURRING_TRANSACTIONS_KEY = 'clarityflow_recurring_transactions';
 const SAVINGS_GOALS_KEY = 'clarityflow_savings_goals';
 const TAGS_KEY = 'clarityflow_tags';
+const CUSTOM_CATEGORIES_KEY = 'clarityflow_custom_categories';
 const CURRENCIES_KEY = 'clarityflow_currencies';
 const SEARCH_PRESETS_KEY = 'clarityflow_search_presets';
 const USER_PREFERENCES_KEY = 'clarityflow_preferences';
@@ -41,15 +44,22 @@ export const loadTransactions = (): Transaction[] => {
     }
 };
 
-// Save transactions to localStorage
-export const saveTransactions = (transactions: Transaction[]): void => {
+// Internal synchronous write function
+const writeTransactionsToStorage = (transactions: Transaction[]): void => {
     if (typeof window === 'undefined') return;
-
     try {
         localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(transactions));
     } catch (error) {
         console.error('Error saving transactions:', error);
     }
+};
+
+// Debounced version - saves after 500ms of no activity
+const debouncedWriteTransactions = debounce(writeTransactionsToStorage, 500);
+
+// Save transactions to localStorage (debounced)
+export const saveTransactions = (transactions: Transaction[]): void => {
+    debouncedWriteTransactions(transactions);
 };
 
 // Load budget goals from localStorage
@@ -65,15 +75,22 @@ export const loadBudgetGoals = (): BudgetGoals => {
     }
 };
 
-// Save budget goals to localStorage
-export const saveBudgetGoals = (goals: BudgetGoals): void => {
+// Internal synchronous write function
+const writeBudgetGoalsToStorage = (goals: BudgetGoals): void => {
     if (typeof window === 'undefined') return;
-
     try {
         localStorage.setItem(BUDGET_GOALS_KEY, JSON.stringify(goals));
     } catch (error) {
         console.error('Error saving budget goals:', error);
     }
+};
+
+// Debounced version
+const debouncedWriteBudgetGoals = debounce(writeBudgetGoalsToStorage, 500);
+
+// Save budget goals to localStorage (debounced)
+export const saveBudgetGoals = (goals: BudgetGoals): void => {
+    debouncedWriteBudgetGoals(goals);
 };
 
 // Recurring Transactions
@@ -88,13 +105,21 @@ export const loadRecurringTransactions = (): RecurringTransaction[] => {
     }
 };
 
-export const saveRecurringTransactions = (recurring: RecurringTransaction[]): void => {
+// Internal synchronous write function
+const writeRecurringToStorage = (recurring: RecurringTransaction[]): void => {
     if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(RECURRING_TRANSACTIONS_KEY, JSON.stringify(recurring));
     } catch (error) {
         console.error('Error saving recurring transactions:', error);
     }
+};
+
+// Debounced version
+const debouncedWriteRecurring = debounce(writeRecurringToStorage, 500);
+
+export const saveRecurringTransactions = (recurring: RecurringTransaction[]): void => {
+    debouncedWriteRecurring(recurring);
 };
 
 // Savings Goals
@@ -109,13 +134,21 @@ export const loadSavingsGoals = (): SavingsGoal[] => {
     }
 };
 
-export const saveSavingsGoals = (goals: SavingsGoal[]): void => {
+// Internal synchronous write function
+const writeSavingsGoalsToStorage = (goals: SavingsGoal[]): void => {
     if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(SAVINGS_GOALS_KEY, JSON.stringify(goals));
     } catch (error) {
         console.error('Error saving savings goals:', error);
     }
+};
+
+// Debounced version
+const debouncedWriteSavingsGoals = debounce(writeSavingsGoalsToStorage, 500);
+
+export const saveSavingsGoals = (goals: SavingsGoal[]): void => {
+    debouncedWriteSavingsGoals(goals);
 };
 
 // Tags
@@ -130,7 +163,8 @@ export const loadTags = (): Tag[] => {
     }
 };
 
-export const saveTags = (tags: Tag[]): void => {
+// Internal synchronous write function
+const writeTagsToStorage = (tags: Tag[]): void => {
     if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(TAGS_KEY, JSON.stringify(tags));
@@ -138,6 +172,43 @@ export const saveTags = (tags: Tag[]): void => {
         console.error('Error saving tags:', error);
     }
 };
+
+// Debounced version
+const debouncedWriteTags = debounce(writeTagsToStorage, 500);
+
+export const saveTags = (tags: Tag[]): void => {
+    debouncedWriteTags(tags);
+};
+
+// Custom Categories
+export const loadCustomCategories = (): CustomCategory[] => {
+    if (typeof window === 'undefined') return [];
+    try {
+        const data = localStorage.getItem(CUSTOM_CATEGORIES_KEY);
+        return data ? JSON.parse(data) : [];
+    } catch (error) {
+        console.error('Error loading custom categories:', error);
+        return [];
+    }
+};
+
+// Internal synchronous write function
+const writeCustomCategoriesToStorage = (categories: CustomCategory[]): void => {
+    if (typeof window === 'undefined') return;
+    try {
+        localStorage.setItem(CUSTOM_CATEGORIES_KEY, JSON.stringify(categories));
+    } catch (error) {
+        console.error('Error saving custom categories:', error);
+    }
+};
+
+// Debounced version
+const debouncedWriteCustomCategories = debounce(writeCustomCategoriesToStorage, 500);
+
+export const saveCustomCategories = (categories: CustomCategory[]): void => {
+    debouncedWriteCustomCategories(categories);
+};
+
 
 // Currencies
 export const loadCurrencies = (): CurrencyInfo[] => {
@@ -151,13 +222,21 @@ export const loadCurrencies = (): CurrencyInfo[] => {
     }
 };
 
-export const saveCurrencies = (currencies: CurrencyInfo[]): void => {
+// Internal synchronous write function
+const writeCurrenciesToStorage = (currencies: CurrencyInfo[]): void => {
     if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(CURRENCIES_KEY, JSON.stringify(currencies));
     } catch (error) {
         console.error('Error saving currencies:', error);
     }
+};
+
+// Debounced version
+const debouncedWriteCurrencies = debounce(writeCurrenciesToStorage, 500);
+
+export const saveCurrencies = (currencies: CurrencyInfo[]): void => {
+    debouncedWriteCurrencies(currencies);
 };
 
 // Search Presets
@@ -172,13 +251,21 @@ export const loadSearchPresets = (): SearchPreset[] => {
     }
 };
 
-export const saveSearchPresets = (presets: SearchPreset[]): void => {
+// Internal synchronous write function
+const writeSearchPresetsToStorage = (presets: SearchPreset[]): void => {
     if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(SEARCH_PRESETS_KEY, JSON.stringify(presets));
     } catch (error) {
         console.error('Error saving search presets:', error);
     }
+};
+
+// Debounced version
+const debouncedWriteSearchPresets = debounce(writeSearchPresetsToStorage, 500);
+
+export const saveSearchPresets = (presets: SearchPreset[]): void => {
+    debouncedWriteSearchPresets(presets);
 };
 
 // User Preferences
@@ -193,13 +280,21 @@ export const loadUserPreferences = (): UserPreferences | null => {
     }
 };
 
-export const saveUserPreferences = (preferences: UserPreferences): void => {
+// Internal synchronous write function
+const writeUserPreferencesToStorage = (preferences: UserPreferences): void => {
     if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(USER_PREFERENCES_KEY, JSON.stringify(preferences));
     } catch (error) {
         console.error('Error saving user preferences:', error);
     }
+};
+
+// Debounced version
+const debouncedWriteUserPreferences = debounce(writeUserPreferencesToStorage, 500);
+
+export const saveUserPreferences = (preferences: UserPreferences): void => {
+    debouncedWriteUserPreferences(preferences);
 };
 
 // Notifications
@@ -214,13 +309,21 @@ export const loadNotifications = (): Notification[] => {
     }
 };
 
-export const saveNotifications = (notifications: Notification[]): void => {
+// Internal synchronous write function
+const writeNotificationsToStorage = (notifications: Notification[]): void => {
     if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(notifications));
     } catch (error) {
         console.error('Error saving notifications:', error);
     }
+};
+
+// Debounced version
+const debouncedWriteNotifications = debounce(writeNotificationsToStorage, 500);
+
+export const saveNotifications = (notifications: Notification[]): void => {
+    debouncedWriteNotifications(notifications);
 };
 
 // Notification Settings
@@ -235,13 +338,21 @@ export const loadNotificationSettings = (): NotificationSettings => {
     }
 };
 
-export const saveNotificationSettings = (settings: NotificationSettings): void => {
+// Internal synchronous write function
+const writeNotificationSettingsToStorage = (settings: NotificationSettings): void => {
     if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(settings));
     } catch (error) {
         console.error('Error saving notification settings:', error);
     }
+};
+
+// Debounced version
+const debouncedWriteNotificationSettings = debounce(writeNotificationSettingsToStorage, 500);
+
+export const saveNotificationSettings = (settings: NotificationSettings): void => {
+    debouncedWriteNotificationSettings(settings);
 };
 
 const getDefaultNotificationSettings = (): NotificationSettings => ({
@@ -266,13 +377,21 @@ export const loadMultiPeriodBudgets = (): MultiPeriodBudgetGoals => {
     }
 };
 
-export const saveMultiPeriodBudgets = (budgets: MultiPeriodBudgetGoals): void => {
+// Internal synchronous write function
+const writeMultiPeriodBudgetsToStorage = (budgets: MultiPeriodBudgetGoals): void => {
     if (typeof window === 'undefined') return;
     try {
         localStorage.setItem(MULTI_PERIOD_BUDGETS_KEY, JSON.stringify(budgets));
     } catch (error) {
         console.error('Error saving multi-period budgets:', error);
     }
+};
+
+// Debounced version
+const debouncedWriteMultiPeriodBudgets = debounce(writeMultiPeriodBudgetsToStorage, 500);
+
+export const saveMultiPeriodBudgets = (budgets: MultiPeriodBudgetGoals): void => {
+    debouncedWriteMultiPeriodBudgets(budgets);
 };
 
 const getDefaultMultiPeriodBudgets = (): MultiPeriodBudgetGoals => ({
@@ -358,6 +477,7 @@ export const clearAllData = (): void => {
         localStorage.removeItem(RECURRING_TRANSACTIONS_KEY);
         localStorage.removeItem(SAVINGS_GOALS_KEY);
         localStorage.removeItem(TAGS_KEY);
+        localStorage.removeItem(CUSTOM_CATEGORIES_KEY);
         localStorage.removeItem(CURRENCIES_KEY);
         localStorage.removeItem(SEARCH_PRESETS_KEY);
         localStorage.removeItem(USER_PREFERENCES_KEY);

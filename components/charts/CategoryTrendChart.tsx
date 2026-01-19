@@ -8,7 +8,8 @@ import { subMonths } from 'date-fns';
 const CHART_COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
 export default function CategoryTrendChart() {
-    const { transactions } = useBudgetStore();
+    // Selective subscription
+    const transactions = useBudgetStore(state => state.transactions);
 
     const endDate = new Date();
     const startDate = subMonths(endDate, 5); // Last 6 months

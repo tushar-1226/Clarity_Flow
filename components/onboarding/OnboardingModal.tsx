@@ -5,7 +5,9 @@ import { useBudgetStore } from '@/store/budgetStore';
 import { X, ArrowRight, Check } from 'lucide-react';
 
 export function OnboardingModal() {
-    const { userPreferences, completeOnboarding } = useBudgetStore();
+    // Selective subscriptions
+    const userPreferences = useBudgetStore(state => state.userPreferences);
+    const completeOnboarding = useBudgetStore(state => state.completeOnboarding);
     const [currentStep, setCurrentStep] = useState(0);
     const [showModal, setShowModal] = useState(false);
 

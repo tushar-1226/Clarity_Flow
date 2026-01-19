@@ -1,13 +1,21 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { useBudgetStore } from '@/store/budgetStore';
 import { calculateFinancialHealthScore } from '@/lib/calculations';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 export function FinancialHealthScore() {
-    const { transactions, budgetGoals } = useBudgetStore();
+    // Selective subscriptions
+    const transactions = useBudgetStore(state => state.transactions);
+    const budgetGoals = useBudgetStore(state => state.budgetGoals);
 
-    const healthMetrics = calculateFinancialHealthScore(transactions, budgetGoals);
+    // Memoize expensive calculation - only recomputes when dependencies change
+    const healthMetrics = useMemo(
+        () => calculateFinancialHealthScore(transactions, budgetGoals),
+        [transactions, budgetGoals]
+    );
 
     const getScoreColor = (score: number) => {
         if (score >= 70) return 'text-green-600 dark:text-green-400';
@@ -103,9 +111,9 @@ export function FinancialHealthScore() {
 
             <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <p className="text-sm text-blue-800 dark:text-blue-300">
-                    {healthMetrics.score >= 70 && '🎉 Excellent! Your finances are in great shape.'}
-                    {healthMetrics.score >= 50 && healthMetrics.score < 70 && '👍 Good progress! Focus on increasing your savings rate.'}
-                    {healthMetrics.score < 50 && '⚠️ Consider reviewing your budget and reducing expenses.'}
+                    {healthMetrics.score >= 70 && ' Excellent! Your finances are in great shape.'}
+                    {healthMetrics.score >= 50 && healthMetrics.score < 70 && ' Good progress! Focus on increasing your savings rate.'}
+                    {healthMetrics.score < 50 && ' Consider reviewing your budget and reducing expenses.'}
                 </p>
             </div>
         </div>

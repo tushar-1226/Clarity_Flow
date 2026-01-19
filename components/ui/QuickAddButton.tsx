@@ -8,7 +8,9 @@ import { format } from 'date-fns';
 
 export function QuickAddButton() {
     const [isOpen, setIsOpen] = useState(false);
-    const { addTransaction, baseCurrency } = useBudgetStore();
+    // Selective subscriptions
+    const addTransaction = useBudgetStore(state => state.addTransaction);
+    const baseCurrency = useBudgetStore(state => state.baseCurrency);
     const [formData, setFormData] = useState({
         type: 'expense' as TransactionType,
         category: EXPENSE_CATEGORIES[0] as string,
@@ -94,8 +96,8 @@ export function QuickAddButton() {
                                         type="button"
                                         onClick={() => handleTypeChange('income')}
                                         className={`px-4 py-2 rounded-lg font-medium transition-colors ${formData.type === 'income'
-                                                ? 'bg-green-600 text-white'
-                                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                                            ? 'bg-green-600 text-white'
+                                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                                             }`}
                                     >
                                         Income
@@ -104,8 +106,8 @@ export function QuickAddButton() {
                                         type="button"
                                         onClick={() => handleTypeChange('expense')}
                                         className={`px-4 py-2 rounded-lg font-medium transition-colors ${formData.type === 'expense'
-                                                ? 'bg-red-600 text-white'
-                                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                                            ? 'bg-red-600 text-white'
+                                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                                             }`}
                                     >
                                         Expense

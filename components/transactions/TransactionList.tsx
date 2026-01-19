@@ -1,12 +1,21 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { Trash2 } from 'lucide-react';
 import { useBudgetStore } from '@/store/budgetStore';
 import { format } from 'date-fns';
 
 export function TransactionList() {
-    const { deleteTransaction, getFilteredTransactions } = useBudgetStore();
-    const transactions = getFilteredTransactions();
+    // Selective subscriptions - only re-renders when necessary
+    const deleteTransaction = useBudgetStore(state => state.deleteTransaction);
+    const getFilteredTransactions = useBudgetStore(state => state.getFilteredTransactions);
+
+    // Memoize filtered transactions to prevent redundant filtering
+    const transactions = useMemo(
+        () => getFilteredTransactions(),
+        [getFilteredTransactions]
+    );
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
@@ -84,8 +93,8 @@ export function TransactionList() {
                                 <td className="py-3 px-2">
                                     <span
                                         className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${transaction.type === 'income'
-                                                ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
-                                                : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
+                                            ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
+                                            : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
                                             }`}
                                     >
                                         {transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}
@@ -98,8 +107,8 @@ export function TransactionList() {
                                     {transaction.description || '-'}
                                 </td>
                                 <td className={`py-3 px-2 text-sm text-right font-semibold ${transaction.type === 'income'
-                                        ? 'text-green-600 dark:text-green-400'
-                                        : 'text-red-600 dark:text-red-400'
+                                    ? 'text-green-600 dark:text-green-400'
+                                    : 'text-red-600 dark:text-red-400'
                                     }`}>
                                     {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
                                 </td>

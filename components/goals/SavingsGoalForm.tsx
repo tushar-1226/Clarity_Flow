@@ -7,7 +7,9 @@ import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '@/types';
 import { format } from 'date-fns';
 
 export function SavingsGoalForm() {
-    const { addSavingsGoal, baseCurrency } = useBudgetStore();
+    // Selective subscriptions
+    const addSavingsGoal = useBudgetStore(state => state.addSavingsGoal);
+    const baseCurrency = useBudgetStore(state => state.baseCurrency);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({
         name: '',

@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { useBudgetStore } from '@/store/budgetStore';
 import { getExpensesByCategory } from '@/lib/calculations';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
@@ -17,13 +19,22 @@ const COLORS = [
 ];
 
 export function ExpensePieChart() {
-    const { transactions } = useBudgetStore();
-    const expensesByCategory = getExpensesByCategory(transactions);
+    // Selective subscription - only re-renders when transactions change
+    const transactions = useBudgetStore(state => state.transactions);
 
-    const data = Object.entries(expensesByCategory).map(([name, value]) => ({
-        name,
-        value,
-    }));
+    // Memoize expensive calculations
+    const expensesByCategory = useMemo(
+        () => getExpensesByCategory(transactions),
+        [transactions]
+    );
+
+    const data = useMemo(
+        () => Object.entries(expensesByCategory).map(([name, value]) => ({
+            name,
+            value,
+        })),
+        [expensesByCategory]
+    );
 
     if (data.length === 0) {
         return (
