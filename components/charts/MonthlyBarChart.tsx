@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { useBudgetStore } from '@/store/budgetStore';
 import { getMonthlyData } from '@/lib/calculations';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -7,13 +9,21 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 export function MonthlyBarChart() {
     // Selective subscription - only re-renders when transactions change
     const transactions = useBudgetStore(state => state.transactions);
-    const monthlyData = getMonthlyData(transactions);
 
-    const data = monthlyData.months.map((month, index) => ({
-        month,
-        income: monthlyData.income[index],
-        expenses: monthlyData.expenses[index],
-    }));
+    // Memoize expensive calculations
+    const monthlyData = useMemo(
+        () => getMonthlyData(transactions),
+        [transactions]
+    );
+
+    const data = useMemo(
+        () => monthlyData.months.map((month, index) => ({
+            month,
+            income: monthlyData.income[index],
+            expenses: monthlyData.expenses[index],
+        })),
+        [monthlyData]
+    );
 
     if (data.length === 0) {
         return (

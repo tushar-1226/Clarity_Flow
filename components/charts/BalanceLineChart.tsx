@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { useBudgetStore } from '@/store/budgetStore';
 import { getBalanceOverTime } from '@/lib/calculations';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -8,13 +10,21 @@ import { format } from 'date-fns';
 export function BalanceLineChart() {
     // Selective subscription - only re-renders when transactions change
     const transactions = useBudgetStore(state => state.transactions);
-    const balanceData = getBalanceOverTime(transactions);
 
-    const data = balanceData.dates.map((date, index) => ({
-        date,
-        balance: balanceData.balances[index],
-        displayDate: format(new Date(date), 'MMM dd'),
-    }));
+    // Memoize expensive calculations
+    const balanceData = useMemo(
+        () => getBalanceOverTime(transactions),
+        [transactions]
+    );
+
+    const data = useMemo(
+        () => balanceData.dates.map((date, index) => ({
+            date,
+            balance: balanceData.balances[index],
+            displayDate: format(new Date(date), 'MMM dd'),
+        })),
+        [balanceData]
+    );
 
     if (data.length === 0) {
         return (

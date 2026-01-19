@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { useBudgetStore } from '@/store/budgetStore';
 import { calculateTotalIncome, calculateTotalExpenses, calculateBalance } from '@/lib/calculations';
 import { TrendingUp, TrendingDown, Wallet } from 'lucide-react';
@@ -8,9 +10,19 @@ export function FinancialSummary() {
     // Selective subscription - only re-renders when transactions change
     const transactions = useBudgetStore(state => state.transactions);
 
-    const totalIncome = calculateTotalIncome(transactions);
-    const totalExpenses = calculateTotalExpenses(transactions);
-    const balance = calculateBalance(transactions);
+    // Memoize expensive calculations
+    const totalIncome = useMemo(
+        () => calculateTotalIncome(transactions),
+        [transactions]
+    );
+    const totalExpenses = useMemo(
+        () => calculateTotalExpenses(transactions),
+        [transactions]
+    );
+    const balance = useMemo(
+        () => calculateBalance(transactions),
+        [transactions]
+    );
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
