@@ -7,7 +7,12 @@ import { calculateGoalProgress, calculateMonthsToGoal, getAverageMonthlySavings 
 import { format } from 'date-fns';
 
 export function SavingsGoalTracker() {
-    const { savingsGoals, transactions, deleteSavingsGoal, contributeToSavingsGoal, baseCurrency } = useBudgetStore();
+    // Selective subscriptions
+    const savingsGoals = useBudgetStore(state => state.savingsGoals);
+    const transactions = useBudgetStore(state => state.transactions);
+    const deleteSavingsGoal = useBudgetStore(state => state.deleteSavingsGoal);
+    const contributeToSavingsGoal = useBudgetStore(state => state.contributeToSavingsGoal);
+    const baseCurrency = useBudgetStore(state => state.baseCurrency);
     const [showForm, setShowForm] = useState(false);
 
     const averageSavings = getAverageMonthlySavings(transactions);
@@ -79,8 +84,8 @@ export function SavingsGoalTracker() {
                         <div
                             key={goal.id}
                             className={`p-4 rounded-lg border-2 ${progress.isComplete
-                                    ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700'
-                                    : 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600'
+                                ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700'
+                                : 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600'
                                 }`}
                         >
                             <div className="flex items-start justify-between mb-3">
@@ -125,12 +130,12 @@ export function SavingsGoalTracker() {
                                 <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3 overflow-hidden">
                                     <div
                                         className={`h-full transition-all duration-300 ${progress.isComplete
-                                                ? 'bg-green-500'
-                                                : progress.percentage >= 75
-                                                    ? 'bg-blue-500'
-                                                    : progress.percentage >= 50
-                                                        ? 'bg-yellow-500'
-                                                        : 'bg-purple-500'
+                                            ? 'bg-green-500'
+                                            : progress.percentage >= 75
+                                                ? 'bg-blue-500'
+                                                : progress.percentage >= 50
+                                                    ? 'bg-yellow-500'
+                                                    : 'bg-purple-500'
                                             }`}
                                         style={{ width: `${Math.min(progress.percentage, 100)}%` }}
                                     />

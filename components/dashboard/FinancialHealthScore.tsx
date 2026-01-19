@@ -5,7 +5,9 @@ import { calculateFinancialHealthScore } from '@/lib/calculations';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 export function FinancialHealthScore() {
-    const { transactions, budgetGoals } = useBudgetStore();
+    // Selective subscriptions
+    const transactions = useBudgetStore(state => state.transactions);
+    const budgetGoals = useBudgetStore(state => state.budgetGoals);
 
     const healthMetrics = calculateFinancialHealthScore(transactions, budgetGoals);
 

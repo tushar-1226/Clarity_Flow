@@ -25,7 +25,9 @@ import ResetDataButton from '@/components/ui/ResetDataButton';
 
 
 export default function Home() {
-    const { initialize, userPreferences } = useBudgetStore();
+    // Selective subscriptions
+    const initialize = useBudgetStore(state => state.initialize);
+    const userPreferences = useBudgetStore(state => state.userPreferences);
 
     useEffect(() => {
         initialize();

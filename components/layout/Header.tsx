@@ -8,7 +8,9 @@ import { exportToCSV, importFromCSV } from '@/lib/calculations';
 import { useRef } from 'react';
 
 export function Header() {
-    const { transactions, importTransactions } = useBudgetStore();
+    // Selective subscriptions
+    const transactions = useBudgetStore(state => state.transactions);
+    const importTransactions = useBudgetStore(state => state.importTransactions);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleExport = () => {

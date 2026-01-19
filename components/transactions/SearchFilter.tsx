@@ -4,7 +4,10 @@ import { Search, X } from 'lucide-react';
 import { useBudgetStore } from '@/store/budgetStore';
 
 export function SearchFilter() {
-    const { filters, setFilters, clearFilters } = useBudgetStore();
+    // Selective subscriptions
+    const filters = useBudgetStore(state => state.filters);
+    const setFilters = useBudgetStore(state => state.setFilters);
+    const clearFilters = useBudgetStore(state => state.clearFilters);
 
     return (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">

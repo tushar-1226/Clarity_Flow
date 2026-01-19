@@ -6,7 +6,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { format } from 'date-fns';
 
 export function BalanceLineChart() {
-    const { transactions } = useBudgetStore();
+    // Selective subscription - only re-renders when transactions change
+    const transactions = useBudgetStore(state => state.transactions);
     const balanceData = getBalanceOverTime(transactions);
 
     const data = balanceData.dates.map((date, index) => ({

@@ -17,7 +17,8 @@ const COLORS = [
 ];
 
 export function ExpensePieChart() {
-    const { transactions } = useBudgetStore();
+    // Selective subscription - only re-renders when transactions change
+    const transactions = useBudgetStore(state => state.transactions);
     const expensesByCategory = getExpensesByCategory(transactions);
 
     const data = Object.entries(expensesByCategory).map(([name, value]) => ({

@@ -6,7 +6,8 @@ import { useBudgetStore } from '@/store/budgetStore';
 import { EXPENSE_CATEGORIES } from '@/types';
 
 export function BudgetGoals() {
-    const { setBudgetGoal } = useBudgetStore();
+    // Selective subscription
+    const setBudgetGoal = useBudgetStore(state => state.setBudgetGoal);
     const [category, setCategory] = useState<string>(EXPENSE_CATEGORIES[0]);
     const [limit, setLimit] = useState('');
 

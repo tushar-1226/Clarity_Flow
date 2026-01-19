@@ -7,7 +7,8 @@ import { subMonths } from 'date-fns';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 export default function MonthlyTrendChart() {
-    const { transactions } = useBudgetStore();
+    // Selective subscription
+    const transactions = useBudgetStore(state => state.transactions);
 
     // Calculate last 6 months of data
     const endDate = new Date();

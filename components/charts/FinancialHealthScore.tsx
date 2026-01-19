@@ -5,7 +5,9 @@ import { calculateFinancialHealthScore } from '@/lib/analytics';
 import { TrendingUp, TrendingDown, Minus, Target, PiggyBank, Activity, LayoutGrid } from 'lucide-react';
 
 export default function FinancialHealthScore() {
-    const { transactions, budgetGoals } = useBudgetStore();
+    // Selective subscriptions
+    const transactions = useBudgetStore(state => state.transactions);
+    const budgetGoals = useBudgetStore(state => state.budgetGoals);
 
     const healthData = calculateFinancialHealthScore(transactions, budgetGoals);
 

@@ -5,7 +5,8 @@ import { getMonthlyData } from '@/lib/calculations';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export function MonthlyBarChart() {
-    const { transactions } = useBudgetStore();
+    // Selective subscription - only re-renders when transactions change
+    const transactions = useBudgetStore(state => state.transactions);
     const monthlyData = getMonthlyData(transactions);
 
     const data = monthlyData.months.map((month, index) => ({

@@ -5,7 +5,10 @@ import { useBudgetStore } from '@/store/budgetStore';
 import { calculateBudgetProgress } from '@/lib/calculations';
 
 export function BudgetTracking() {
-    const { transactions, budgetGoals, removeBudgetGoal } = useBudgetStore();
+    // Selective subscriptions
+    const transactions = useBudgetStore(state => state.transactions);
+    const budgetGoals = useBudgetStore(state => state.budgetGoals);
+    const removeBudgetGoal = useBudgetStore(state => state.removeBudgetGoal);
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
@@ -110,18 +113,18 @@ export function BudgetTracking() {
 
                             <div className="mt-2 flex items-center justify-between text-sm">
                                 <span className={`font-medium ${progress.status === 'over'
-                                        ? 'text-red-600 dark:text-red-400'
-                                        : 'text-gray-700 dark:text-gray-300'
+                                    ? 'text-red-600 dark:text-red-400'
+                                    : 'text-gray-700 dark:text-gray-300'
                                     }`}>
                                     {progress.percentage.toFixed(1)}% used
                                 </span>
                                 <span className={`font-semibold ${progress.status === 'safe'
-                                        ? 'text-green-600 dark:text-green-400'
-                                        : progress.status === 'caution'
-                                            ? 'text-yellow-600 dark:text-yellow-400'
-                                            : progress.status === 'warning'
-                                                ? 'text-orange-600 dark:text-orange-400'
-                                                : 'text-red-600 dark:text-red-400'
+                                    ? 'text-green-600 dark:text-green-400'
+                                    : progress.status === 'caution'
+                                        ? 'text-yellow-600 dark:text-yellow-400'
+                                        : progress.status === 'warning'
+                                            ? 'text-orange-600 dark:text-orange-400'
+                                            : 'text-red-600 dark:text-red-400'
                                     }`}>
                                     {progress.status === 'safe' && '✓ Safe'}
                                     {progress.status === 'caution' && '⚠ Caution'}

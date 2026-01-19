@@ -7,7 +7,8 @@ import { TransactionType, INCOME_CATEGORIES, EXPENSE_CATEGORIES, RecurrenceFrequ
 import { format, addDays } from 'date-fns';
 
 export function RecurringTransactionForm() {
-    const { addRecurringTransaction } = useBudgetStore();
+    // Selective subscription
+    const addRecurringTransaction = useBudgetStore(state => state.addRecurringTransaction);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({
         type: 'expense' as TransactionType,

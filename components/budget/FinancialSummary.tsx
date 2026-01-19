@@ -5,7 +5,8 @@ import { calculateTotalIncome, calculateTotalExpenses, calculateBalance } from '
 import { TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 
 export function FinancialSummary() {
-    const { transactions } = useBudgetStore();
+    // Selective subscription - only re-renders when transactions change
+    const transactions = useBudgetStore(state => state.transactions);
 
     const totalIncome = calculateTotalIncome(transactions);
     const totalExpenses = calculateTotalExpenses(transactions);
@@ -54,24 +55,24 @@ export function FinancialSummary() {
                 </div>
 
                 <div className={`flex items-center justify-between p-4 rounded-lg ${balance >= 0
-                        ? 'bg-blue-50 dark:bg-blue-900/20'
-                        : 'bg-orange-50 dark:bg-orange-900/20'
+                    ? 'bg-blue-50 dark:bg-blue-900/20'
+                    : 'bg-orange-50 dark:bg-orange-900/20'
                     }`}>
                     <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${balance >= 0
-                                ? 'bg-blue-100 dark:bg-blue-900/40'
-                                : 'bg-orange-100 dark:bg-orange-900/40'
+                            ? 'bg-blue-100 dark:bg-blue-900/40'
+                            : 'bg-orange-100 dark:bg-orange-900/40'
                             }`}>
                             <Wallet className={`w-6 h-6 ${balance >= 0
-                                    ? 'text-blue-600 dark:text-blue-400'
-                                    : 'text-orange-600 dark:text-orange-400'
+                                ? 'text-blue-600 dark:text-blue-400'
+                                : 'text-orange-600 dark:text-orange-400'
                                 }`} />
                         </div>
                         <div>
                             <p className="text-sm text-gray-600 dark:text-gray-400">Current Balance</p>
                             <p className={`text-xl font-bold ${balance >= 0
-                                    ? 'text-blue-600 dark:text-blue-400'
-                                    : 'text-orange-600 dark:text-orange-400'
+                                ? 'text-blue-600 dark:text-blue-400'
+                                : 'text-orange-600 dark:text-orange-400'
                                 }`}>
                                 {formatCurrency(balance)}
                             </p>
